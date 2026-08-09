@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AetherVault - Dashboard</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh; font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(-45deg, #030712, #111827, #1f1937, #032b43);
+            background-size: 400% 400%; animation: auraBG 15s ease infinite;
+            color: #f3f4f6; padding: 40px 20px;
+        }
+        @keyframes auraBG { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+        .container {
+            max-width: 720px; margin: 0 auto; background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px; padding: 36px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .logout { color: #ef4444; text-decoration: none; font-weight: 600; font-size: 14px; }
+        .upload-box {
+            border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 16px;
+            padding: 24px; text-align: center; margin-bottom: 30px;
+        }
+        input[type="file"] { margin-bottom: 16px; display: block; margin-left: auto; margin-right: auto; }
+        .btn {
+            background: linear-gradient(135deg, #0ea5e9, #6366f1); color: white;
+            padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600;
+            cursor: pointer; text-decoration: none; display: inline-block;
+        }
+        .file-list { margin-top: 20px; }
+        .file-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px; background: rgba(255, 255, 255, 0.04); border-radius: 12px;
+            margin-bottom: 10px; border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .alert { color: #38bdf8; margin-bottom: 16px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Vault User: <span style="color: #38bdf8;">{{ username }}</span></h2>
+            <a href="/logout" class="logout">Logout</a>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}<div class="alert">{{ messages[0] }}</div>{% endif %}
+        {% endwith %}
+
+        <div class="upload-box">
+            <form method="POST" enctype="multipart/form-data">
+                <input type="file" name="file" required>
+                <button type="submit" class="btn">Upload Document</button>
+            </form>
+        </div>
+
+        <h3>Vault Storage Records</h3>
+        <div class="file-list">
+            {% for file in files %}
+            <div class="file-item">
+                <span>📦 {{ file['file_name'] }}</span>
+                <a href="/download/{{ file['file_id'] }}" class="btn" style="padding: 6px 14px; font-size: 13px;">Download</a>
+            </div>
+            {% else %}
+            <p style="color: #9ca3af; margin-top: 10px;">No documents vaulted yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+  </html>
+
