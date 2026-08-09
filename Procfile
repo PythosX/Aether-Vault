@@ -1,3 +1,1 @@
-web: gunicorn app:app
-worker: python bot.py
-
+web: bash start.sh
